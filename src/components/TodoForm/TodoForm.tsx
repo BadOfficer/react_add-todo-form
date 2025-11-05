@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ToDo } from '../../types/ToDo';
-import { getUser } from '../../utils/getUser';
 import { User } from '../../types/User';
 
 interface Props {
@@ -51,7 +50,7 @@ export const TodoForm: React.FC<Props> = ({ onSubmit, users }) => {
       title: trimmedTitle,
       userId: selectedUser,
       completed: false,
-      user: getUser(selectedUser),
+      user: users.find(item => item.id === selectedUser) || null,
     };
 
     onSubmit(newToDo);
