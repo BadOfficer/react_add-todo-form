@@ -2,18 +2,15 @@ import { useState } from 'react';
 import './App.scss';
 import { TodoForm } from './components/TodoForm';
 import serverTodos from './api/todos';
+import serverUsers from './api/users';
 import { ToDo } from './types/ToDo';
 import { TodoList } from './components/TodoList';
 import { getUser } from './utils/getUser';
-import { User } from './types/User';
-
-// import usersFromServer from './api/users';
-// import todosFromServer from './api/todos';
 
 function getPreparedTodos(todos: Omit<ToDo, 'user'>[]): ToDo[] {
   return todos.map(todo => ({
     ...todo,
-    user: getUser(todo.userId) as User,
+    user: getUser(todo.userId),
   }));
 }
 
@@ -22,7 +19,7 @@ export const App = () => {
 
   const handleAddTodo = (todo: ToDo) => {
     setTodos(curTodos => {
-      const id = Math.max(...curTodos.map(item => item.id)) + 1;
+      const id = (Math.max(...curTodos.map(item => item.id)) || 0) + 1;
 
       return [
         ...curTodos,
@@ -38,7 +35,7 @@ export const App = () => {
     <div className="App">
       <h1>Add todo form</h1>
 
-      <TodoForm onSubmit={handleAddTodo} />
+      <TodoForm onSubmit={handleAddTodo} users={serverUsers} />
 
       <TodoList todos={todos} />
     </div>

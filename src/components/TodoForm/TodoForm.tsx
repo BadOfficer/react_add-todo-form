@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import users from '../../api/users';
 import { ToDo } from '../../types/ToDo';
 import { getUser } from '../../utils/getUser';
 import { User } from '../../types/User';
 
 interface Props {
   onSubmit: (todo: ToDo) => void;
+  users: User[];
 }
 
-export const TodoForm: React.FC<Props> = ({ onSubmit }) => {
+export const TodoForm: React.FC<Props> = ({ onSubmit, users }) => {
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState(false);
 
@@ -42,7 +42,7 @@ export const TodoForm: React.FC<Props> = ({ onSubmit }) => {
     setTitleError(!trimmedTitle);
     setSelectedUserError(!selectedUser);
 
-    if (!title || !selectedUser) {
+    if (!trimmedTitle || !selectedUser) {
       return;
     }
 
@@ -51,7 +51,7 @@ export const TodoForm: React.FC<Props> = ({ onSubmit }) => {
       title: trimmedTitle,
       userId: selectedUser,
       completed: false,
-      user: getUser(selectedUser) as User,
+      user: getUser(selectedUser),
     };
 
     onSubmit(newToDo);
